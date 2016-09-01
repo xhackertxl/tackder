@@ -7,6 +7,8 @@ from Average import  *
 #grant session to tacker;//创建李四访问数据库权限
 #grant connect,resource,dba to tacker;
 #报字段CLOB无法创建索引
+#搜索return "CLOB" 修改为
+#return "VARCHAR2(20)"
 #gedit /public/tools/pyenv/versions/anaconda3-4.1.0/lib/python3.5/site-packages/sqlalchemy/sql/compiler.py
 
 
