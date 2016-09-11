@@ -1,6 +1,6 @@
 load   data
-infile '002270.csv'
-append   into   table DAY_002270
+infile '000029.csv'
+append   into   table DAY_000029
 fields terminated by ','
 trailing   nullcols
 (

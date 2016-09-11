@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 
 function watch_jiangshi()
@@ -25,3 +25,7 @@ do
 done
 
 end=$(date +%s) && echo $(( $end - $start ))
+
+
+#还原数据库
+#imp tacker/tacker inctype=RESTORE FULL=y FILE=tacker.dmp
