@@ -167,7 +167,6 @@ class Ora():
         else:
             df = pd.DataFrame
             dict_keys = [r[0].lower() for r in self.cursor.description]
-
             df = pd.DataFrame(data=rows, columns=dict_keys)
 
             rows = df
