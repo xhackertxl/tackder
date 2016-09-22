@@ -11,6 +11,18 @@ exit;
 EOF
 }
 
+function UPDATE_YESTERDAY_CLOSE_ALL()
+{
+
+echo "watch_jiangshi"  ${file:0:6}
+sqlplus -S tacker/tacker@orcl <<EOF
+call UPDATE_YESTERDAY_CLOSE_ALL();
+exit;
+EOF
+}
+
+
+
 start=$(date +%s)
 
 tmpfile=$$.fifo        #创建管道名称
@@ -55,6 +67,8 @@ exec 4>&-                                              #关闭管道
 cd /public/stock/tackder
 #>/dev/null  2>&1 将错误信息输出到空设备
 rm -r sed* >/dev/null  2>&1
+
+UPDATE_YESTERDAY_CLOSE_ALL
 
 
 end=$(date +%s) && echo $(( $end - $start ))

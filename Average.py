@@ -15,18 +15,26 @@ import pandas as pd
 def average(ma_list=[5, 20, 60], stock_data=[]):
 
     # 将数据按照交易日期从远到近排序
-    stock_data.sort('date', inplace=True)
-
+    stock_data.sort_values(['date'],inplace=True)
 
     # 计算简单算术移动平均线MA - 注意：stock_data['close']为股票每天的收盘价
     for ma in ma_list:
-        stock_data['MA_' + str(ma)] = pd.rolling_mean(stock_data['close'], ma)
+        columsStr = 'MA_' + str(ma)
+        if columsStr in stock_data.columns :
+            del stock_data[columsStr]
+        #stock_data['MA_' + str(ma)] = stock_data['close'].rolling(window=ma,center=False).mean()
+        stock_data.insert(stock_data.columns.size,columsStr,stock_data['close'].rolling(window=ma,center=False).mean())
 
     # 计算指数平滑移动平均线EMA
     for ma in ma_list:
-        stock_data['EMA_' + str(ma)] = pd.ewma(stock_data['close'], span=ma)
+        #stock_data['EMA_' + str(ma)] = stock_data['close'].ewm(span=5, ignore_na=False, adjust=True, min_periods=0).mean()
+        columsStr = 'EMA_' + str(ma)
+        if columsStr in stock_data.columns :
+            del stock_data[columsStr]
+        stock_data.insert(stock_data.columns.size,columsStr, stock_data['close'].ewm(span=ma, ignore_na=False, adjust=True, min_periods=0).mean())
+
 
     # 将数据按照交易日期从近到远排序
-    stock_data.sort('date', ascending=False, inplace=True)
+    stock_data.sort_values(['date'], ascending=False, inplace=True)
 
     return stock_data
