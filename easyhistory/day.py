@@ -13,6 +13,8 @@ from . import helpers
 from . import store
 import tushare as ts
 
+
+
 class Day:
     SINA_API = 'http://vip.stock.finance.sina.com.cn/corp/go.php/vMS_FuQuanMarketHistory/stockid/{stock_code}.phtml'
     SINA_API_HOSTNAME = 'vip.stock.finance.sina.com.cn'
@@ -34,22 +36,23 @@ class Day:
         stock_codes = stock_codes[stock_codes['timeToMarket'] != 0]
         stock_codes = stock_codes.index
         pool = ThreadPool(2)
+        #stock_codes = ['000501']
         pool.map(self.update_single_code, stock_codes)
-
     def update_single_code(self, stock_code):
         """ 更新对应的股票文件历史行情
         :param stock_code: 股票代码
         :return:
         """
+        #更新最后日期
+        # self.store.updateDate(stock_code)
+        # return
+
         latest_date = self.store.get_his_stock_date(stock_code)
-
-
         if latest_date == 0 :
             print("#######################" + stock_code)
             updated_data = self.get_all_history(stock_code)
         else:
             now = datetime.now()
-
             if (latest_date.strftime('%Y-%m-%d') == now.strftime('%Y-%m-%d')):
                 print("latest_date" + latest_date.strftime('%Y-%m-%d') + "--$$#### now " + now.strftime('%Y-%m-%d'))
                 return

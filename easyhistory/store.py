@@ -5,7 +5,8 @@ from datetime import datetime
 
 import easyutils
 import pandas as pd
-
+import Average as junxian
+import ZB as zb
 
 def use(export='csv', **kwargs):
     if export.lower() in ['csv']:
@@ -28,6 +29,17 @@ class CSVStore(Store):
         self.result_path = os.path.join(self.path, 'data')
         self.raw_path = os.path.join(self.path, 'raw_data')
 
+    def updateDate(self, stock_code):
+        csv_file_path = os.path.join(self.result_path, '{}.csv'.format(stock_code))
+        if os.path.exists(csv_file_path):
+            try:
+                his = pd.read_csv(csv_file_path)
+                date = his.iloc[0].date
+                self.write_summary(stock_code, date)
+            except ValueError:
+                return
+
+
     def write(self, stock_code, updated_data):
         if not os.path.exists(self.result_path):
             os.makedirs(self.result_path)
@@ -43,13 +55,31 @@ class CSVStore(Store):
 
             updated_data_start_date = updated_data[0][0]
             old_his = his[his.date < updated_data_start_date]
-            updated_his = pd.DataFrame(updated_data, columns=his.columns)
+
+            updated_his = pd.DataFrame(updated_data,columns=['date', 'open', 'high', 'close', 'low', 'volume', 'amount', 'factor'])
             his = old_his.append(updated_his)
         else:
             his = pd.DataFrame(updated_data,
                                columns=['date', 'open', 'high', 'close', 'low', 'volume', 'amount', 'factor'])
+
+
+
+        his = his.loc[:,['date', 'open', 'high', 'close', 'low', 'volume', 'amount', 'factor']]
+
+        # 将数据按照交易日期从远到近排序
+        his.sort_values(['date'], inplace=True)
+
+
+        his =  junxian.average([5, 13, 34,55,260],his)
+
+
+        # 将数据按照交易日期从近到远排序
+        his.sort_values(['date'], ascending=False, inplace=True)
+
         his.to_csv(csv_file_path, index=False)
-        date = his.iloc[-1].date
+
+        date = his.iloc[0].date
+
         self.write_summary(stock_code, date)
         self.write_factor_his(stock_code, his)
 

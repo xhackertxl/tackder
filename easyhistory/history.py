@@ -31,10 +31,14 @@ class Indicator(object):
 
 
 class History(object):
-    def __init__(self, dtype='D', path='history'):
+    def __init__(self, dtype='D', path='history' , stock_code=None):
         self.market = dict()
         data_path = os.path.join(path, 'day', 'data')
-        self.load_csv_files(data_path)
+
+        if stock_code != None :
+            self.load_csv_file(data_path,stock_code)
+        else:
+            self.load_csv_files(data_path)
 
     def load_csv_files(self, path):
         file_list = [f for f in os.listdir(path) if f.endswith('.csv')]
@@ -44,6 +48,17 @@ class History(object):
 
             csv_path = os.path.join(path, stock_csv)
             self.market[stock_code] = Indicator(stock_code, pd.read_csv(csv_path, index_col='date'))
+
+    def load_csv_file(self, path , stock_code):
+
+        csv_file_path = os.path.join( 'history' ,'day', 'data', '{}.csv'.format(stock_code))
+
+        if os.path.exists(csv_file_path):
+            try:
+                self.market = pd.read_csv(csv_file_path, index_col='date')
+            except ValueError:
+                return
+
 
     def __getitem__(self, item):
         return self.market[item]

@@ -15,7 +15,10 @@ import pandas as pd
 def average(ma_list=[5, 20, 60], stock_data=[]):
 
     # 将数据按照交易日期从远到近排序
-    stock_data.sort_values(['date'],inplace=True)
+    #stock_data.sort_values(['date'],inplace=True)
+
+    #计算涨跌幅
+    stock_data['change'] = stock_data['close'].pct_change() * 100
 
     # 计算简单算术移动平均线MA - 注意：stock_data['close']为股票每天的收盘价
     for ma in ma_list:
@@ -35,6 +38,6 @@ def average(ma_list=[5, 20, 60], stock_data=[]):
 
 
     # 将数据按照交易日期从近到远排序
-    stock_data.sort_values(['date'], ascending=False, inplace=True)
+    #stock_data.sort_values(['date'], ascending=False, inplace=True)
 
     return stock_data
