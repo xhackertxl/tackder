@@ -36,7 +36,7 @@ class Day:
         stock_codes = stock_codes[stock_codes['timeToMarket'] != 0]
         stock_codes = stock_codes.index
         pool = ThreadPool(2)
-        #stock_codes = ['000501']
+        #stock_codes = ['002290']
         pool.map(self.update_single_code, stock_codes)
     def update_single_code(self, stock_code):
         """ 更新对应的股票文件历史行情

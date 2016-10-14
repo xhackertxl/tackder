@@ -10,7 +10,7 @@ easyhistory.update()
 
 
 #将数据导入数据库
-os.system('bash /public/stock/tackder/backupOracleDouble.sh')
+#os.system('bash /public/stock/tackder/backupOracleDouble.sh')
 
 
 endtime = datetime.datetime.now()

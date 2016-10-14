@@ -50,7 +50,8 @@ class CSVStore(Store):
         if os.path.exists(csv_file_path):
             try:
                 his = pd.read_csv(csv_file_path)
-            except ValueError:
+            except ValueError as e:
+                print(e)
                 return
 
             updated_data_start_date = updated_data[0][0]
@@ -70,7 +71,7 @@ class CSVStore(Store):
         his.sort_values(['date'], inplace=True)
 
 
-        his =  junxian.average([5, 13, 34,55,260],his)
+        his =  junxian.average([5,10,20,13,34,55,260],his)
 
 
         # 将数据按照交易日期从近到远排序

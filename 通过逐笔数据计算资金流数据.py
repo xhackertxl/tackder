@@ -5,6 +5,26 @@
 import os
 import pandas as pd
 
+import tushare as ts
+
+
+
+#分析逐笔成交
+# 002052& =同洲电子&st=k&m=2
+
+df = ts.get_tick_data('002052',date='2016-09-30')
+df['time']= df['time'].str[:5]
+
+dfs = df.groupby([df['time'], df['type']]).sum()
+dfs.to_excel('/home/oracle/Desktop/002052.xlsx')
+
+
+
+dfs = df.groupby([df['price']]).sum()
+dfs.to_excel('/home/oracle/Desktop/002052-p.xlsx')
+
+
+
 # ========== 遍历数据文件夹中所有股票文件的文件名，得到股票文件名列表file_list
 file_list = []
 for root, dirs, files in os.walk('zhubi-2015-05-19/data'):  # 注意：这里请填写数据文件在您电脑中的路径
